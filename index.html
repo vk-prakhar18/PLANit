@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlanIt AI | Study Productivity Suite</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="top-bar">
+        <div class="brand">
+          <div class="logo">π</div>
+          <div>
+            <h1>PlanIt AI</h1>
+            <p>Modern study productivity engine</p>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span>☀️</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="hero card">
+          <div class="hero-copy">
+            <p class="eyebrow">Interactive blueprint</p>
+            <h2>Create a personalized study operating system.</h2>
+            <p>
+              Input your current subjects, energy habits, and goals—PlanIt AI
+              returns a complete timetable, focus audit, and motivation kit.
+            </p>
+            <ul class="hero-list">
+              <li>Weighted AI timetable</li>
+              <li>Dynamic task stack</li>
+              <li>Focus + habit diagnostics</li>
+            </ul>
+          </div>
+          <form id="plannerForm" class="planner-form">
+            <div class="form-row two-col">
+              <label>
+                Student name
+                <input type="text" name="studentName" placeholder="Alex Kim" required />
+              </label>
+              <label>
+                Exam date
+                <input type="date" name="examDate" required />
+              </label>
+            </div>
+            <div class="form-row two-col">
+              <label>
+                Days available / week
+                <input type="number" name="daysAvailable" min="1" max="7" value="6" required />
+              </label>
+              <label>
+                Daily study hours
+                <input type="number" name="dailyHours" step="0.25" min="1" value="4" required />
+              </label>
+            </div>
+            <div class="form-row">
+              <label>Subjects & priority</label>
+              <div id="subjectsList" class="subjects-list"></div>
+              <button type="button" id="addSubjectBtn" class="ghost-btn">+ Add subject</button>
+            </div>
+            <div class="form-row">
+              <label>
+                Weak areas (comma separated subjects)
+                <input type="text" name="weakAreas" placeholder="Calculus, Physics" />
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Tasks (one per line)
+                <textarea name="tasks" rows="3" placeholder="Finish calculus worksheet&#10;Revise physics notes"></textarea>
+              </label>
+            </div>
+            <div class="form-row two-col">
+              <label>
+                Sleep hours
+                <input type="number" name="sleepHours" step="0.5" min="3" max="10" value="6.5" />
+              </label>
+              <label>
+                Screen time (hrs)
+                <input type="number" name="screenTime" step="0.5" min="0" max="12" value="5" />
+              </label>
+            </div>
+            <div class="form-row two-col">
+              <label>
+                Study hours logged
+                <input type="number" name="loggedStudy" step="0.25" min="0" value="3" />
+              </label>
+              <label>
+                Mood (1-5)
+                <input type="number" name="mood" min="1" max="5" value="3" />
+              </label>
+            </div>
+            <div class="form-row two-col">
+              <label>
+                Wake time
+                <input type="time" name="wakeTime" value="06:45" />
+              </label>
+              <label>
+                Sleep time
+                <input type="time" name="sleepTime" value="23:00" />
+              </label>
+            </div>
+            <div class="form-row two-col">
+              <label>
+                Reading minutes
+                <input type="number" name="readingMinutes" min="0" value="20" />
+              </label>
+              <label>
+                Water intake (L)
+                <input type="number" name="waterIntake" step="0.1" min="0.5" value="2" />
+              </label>
+            </div>
+            <label class="checkbox">
+              <input type="checkbox" name="needsMotivation" checked />
+              Need extra motivation boost
+            </label>
+            <button type="submit" class="primary-btn">Generate my plan</button>
+          </form>
+        </section>
+
+        <section class="hero-metric card hidden" id="summaryCard">
+          <div>
+            <span>Focus score</span>
+            <strong id="focusScoreBadge">--</strong>
+          </div>
+          <div>
+            <span>Exam countdown</span>
+            <strong id="countdownBadge">--</strong>
+          </div>
+          <div>
+            <span>Primary focus</span>
+            <strong id="primaryFocusBadge">--</strong>
+          </div>
+        </section>
+
+        <section class="section hidden" data-section="timetable">
+          <div class="section-head">
+            <h3>AI Timetable</h3>
+            <p>Weighted study plan across the week</p>
+          </div>
+          <div id="timetableGrid" class="grid timetable-grid"></div>
+          <p id="timetableNote" class="note"></p>
+        </section>
+
+        <section class="section hidden" data-section="tasks">
+          <div class="section-head">
+            <h3>Task Prioritizer</h3>
+            <p>Know what to tackle first</p>
+          </div>
+          <div id="taskList" class="grid task-grid"></div>
+        </section>
+
+        <section class="section split hidden" data-section="focus">
+          <div class="card" id="focusCard"></div>
+          <div class="card" id="motivationCard"></div>
+        </section>
+
+        <section class="section hidden" data-section="habits">
+          <div class="section-head">
+            <h3>Habit Builder</h3>
+            <p>Daily loops that reinforce performance</p>
+          </div>
+          <div class="grid habits-grid">
+            <div class="card" id="habitList"></div>
+            <div class="card" id="routineCard"></div>
+          </div>
+        </section>
+
+        <section class="section grid info-grid hidden" data-section="info">
+          <div class="card" id="aboutCard"></div>
+          <div class="card" id="contactCard"></div>
+        </section>
+      </main>
+
+      <footer>
+        <p>Plan smarter. Stress less.</p>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
